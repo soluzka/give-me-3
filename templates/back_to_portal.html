@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Back to Portal</title>
+    <style>
+        body {
+            background: #23272a;
+            color: #fff;
+            font-family: 'Roboto', Arial, sans-serif;
+            text-align: center;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: #2c2f33;
+            border-radius: 12px;
+            padding: 48px 32px 36px 32px;
+            display: inline-block;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.45);
+            margin-top: 40px;
+            max-width: 400px;
+        }
+        .discord-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 18px;
+            display: inline-block;
+        }
+        h2 {
+            color: #faa61a;
+            margin-bottom: 18px;
+        }
+        p {
+            font-size: 1.15em;
+            margin-bottom: 28px;
+        }
+        a.button {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 18px 40px;
+            background: #7289da;
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(50,50,100,0.10);
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        a.button:hover {
+            background: #5a6fb2;
+            box-shadow: 0 4px 16px rgba(90,105,200,0.18);
+        }
+    </style>
+</head>
+<body>
+    <script>
+        setTimeout(function() {
+            window.location.href = "{{ url_for('portal') }}";
+        }, 2000);
+    </script>
+    <div class="container">
+        <span class="discord-icon">
+            <svg width="64" height="64" viewBox="0 0 71 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="71" height="55" rx="16" fill="#7289da"/>
+                <path d="M60.104 4.552A58.96 58.96 0 0 0 46.852.8a.116.116 0 0 0-.123.058c-2.05 3.614-4.342 8.32-5.953 12.06-7.12-1.07-14.1-1.07-21.145 0-1.613-3.757-3.926-8.466-5.953-12.06a.117.117 0 0 0-.123-.058A58.96 58.96 0 0 0 .896 4.552a.106.106 0 0 0-.05.041C-4.418 13.183-6.68 21.563-6.13 29.863a.12.12 0 0 0 .045.082c7.438 5.445 14.66 8.73 21.802 10.904a.116.116 0 0 0 .127-.042c1.677-2.309 3.17-4.736 4.456-7.27a.112.112 0 0 0-.062-.157c-2.45-.936-4.78-2.06-7.03-3.36a.117.117 0 0 1-.012-.196c.473-.356.947-.715 1.406-1.08a.115.115 0 0 1 .12-.012c14.77 6.754 30.73 6.754 45.45 0a.115.115 0 0 1 .122.01c.46.365.933.724 1.406 1.08a.117.117 0 0 1-.01.196c-2.25 1.3-4.583 2.424-7.033 3.36a.112.112 0 0 0-.06.157c1.286 2.534 2.78 4.96 4.456 7.27a.115.115 0 0 0 .127.042c7.145-2.174 14.367-5.459 21.803-10.904a.12.12 0 0 0 .045-.082c.551-8.3-1.712-16.68-6.146-25.27a.106.106 0 0 0-.05-.041zM23.725 37.33c-2.845 0-5.176-2.695-5.176-6.002 0-3.308 2.29-6.003 5.176-6.003 2.902 0 5.176 2.71 5.176 6.003 0 3.307-2.29 6.002-5.176 6.002zm23.55 0c-2.846 0-5.176-2.695-5.176-6.002 0-3.308 2.29-6.003 5.176-6.003 2.902 0 5.176 2.71 5.176 6.003 0 3.307-2.29 6.002-5.176 6.002z" fill="#fff"/>
+            </svg>
+        </span>
+        <h2>Spam Settings Updated</h2>
+        <p>Your spam settings have been updated successfully.<br>
+        <strong>Click the button below to return to the portal immediately.</strong><br>
+        <small>You will also be redirected automatically in a moment.</small></p>
+        <a href="/portal" class="button" style="font-size: 1.3em; padding: 18px 40px; margin-top: 30px;">Back to Portal</a>
+    </div>
+</body>
+</html>

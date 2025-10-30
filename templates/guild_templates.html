@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Guild Templates</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #23272a; color: #fff; }        h1 { color: #faa61a; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border-bottom: 1px solid #444; text-align: left; }
+        th { background: #23272a; color: #faa61a; }
+        tr:last-child td { border-bottom: none; }
+        .apply-btn { background: #faa61a; color: #23272a; border: none; padding: 7px 18px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .apply-btn:hover { background: #ffbb3b; }
+        a { color: #faa61a; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+    <style>
+    .drop-zone {
+    width: 100%;
+    max-width: 700px;
+    box-sizing: border-box;
+        border: 2px dashed #faa61a;
+        border-radius: 8px;
+        background: #2c2f33;
+        color: #faa61a;
+        padding: 22px;
+        text-align: center;
+        font-size: 1.15rem;
+        margin-bottom: 32px;
+        transition: background 0.2s, border-color 0.2s;
+        outline: none;
+    }
+    .drop-zone.drag-over {
+        background: #ffbb3b33;
+        border-color: #ffbb3b;
+        color: #23272a;
+    }
+    .template-card {
+        box-shadow: 0 2px 8px #0008;
+        border: 2px solid #faa61a44;
+        margin-bottom: 18px;
+        transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .template-card[draggable="true"]:hover, .template-card[draggable="true"]:focus {
+        border-color: #ffbb3b;
+        box-shadow: 0 4px 16px #faa61a66;
+        cursor: grab;
+        outline: 2px solid #faa61a;
+    }
+    .template-meta, .template-channels, .template-roles {
+        margin-top: 7px;
+        font-size: 0.98em;
+    }
+    .template-channels ul, .template-roles ul {
+        margin: 0 0 0 10px;
+        padding: 0;
+        list-style: disc;
+    }
+    .template-channels li, .template-roles li {
+        color: #fff;
+        font-size: 0.97em;
+    }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <span class="logo">Discord Portal</span>
+            <nav>
+                <a href="{{ url_for('portal') }}">Portal Home</a>
+                <a href="{{ url_for('guild_messages', guild_id=guild_id) }}">View Messages</a>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <h1>Templates for Guild <span class="guild-id">{{ guild_id }}</span></h1>
+        {% if guild_owner and guild_owner_id %}
+            <div class="guild-owner-info" style="margin-bottom:14px; color:#faa61a;">
+                <b>Guild Owner:</b> {{ guild_owner }} <span style="color:#aaa; font-size:0.95em;">(ID: <span style="font-style:italic;">Hidden</span>)</span>
+            </div>
+        {% endif %}
+        <form method="POST" action="{{ url_for('save_template', guild_id=guild_id) }}" style="margin-bottom:24px;">
+    <label for="template_name"><b>Save Current Settings as Template:</b></label>
+    <input type="text" id="template_name" name="template_name" placeholder="Template name (optional)" style="margin-left: 8px; padding: 6px;">
+    <button type="submit" class="apply-btn">Save Template</button>
+</form>
+        <div class="guild-actions" style="display:flex; gap:16px; margin-bottom:18px;">
+    <form method="GET" action="{{ url_for('download_guild_settings', guild_id=guild_id) }}" style="display:inline;">
+        <button type="submit" class="apply-btn" style="padding:7px 18px;">Download Guild Settings</button>
+    </form>
+    <a href="/discord_guild_backups/{{ guild_id }}.json" download class="apply-btn" style="padding:7px 18px; text-decoration:none; display:inline-block;">Download Latest Backup</a>
+</div>
+{% if templates %}
+<div class="templates-area">
+    <div class="templates-grid">
+        {% for template in templates %}
+<div class="template-card" draggable="true" ondragstart="handleDragStart(event, '{{ template.filename if template.filename is defined else template }}')" tabindex="0" aria-label="Template {{ template.filename if template.filename is defined else template }}">
+    <div class="template-info">
+        <span class="template-name">{{ template.filename if template.filename is defined else template }}</span>
+        <div class="template-meta">
+            <span class="template-type">Type: {{ 'Backup' if template.is_backup else 'Template' }}</span><br>
+            <span class="template-date">Created: {{ template.created if template.created is defined else 'Unknown' }}</span>
+        </div>
+        <div class="template-channels">
+            <strong>Channels:</strong>
+            <ul>
+            {% for channel in template.channels if template.channels is defined %}
+                <li>#{{ channel }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="template-roles">
+            <strong>Roles:</strong>
+            <ul>
+            {% for role in template.roles if template.roles is defined %}
+                <li>@{{ role }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+
+        {# --- Backup/Template Actions --- #}
+        {% if template.is_backup %}
+            <span style="font-size:0.97em; color:#fff;">Guild ID: {{ guild_id }}</span><br>
+            <div class="template-actions">
+                <a href="/discord_guild_backups/{{ template.filename }}" download style="color:#43b581; font-size:0.98em;">Download Backup JSON</a>
+            </div>
+            {% if is_owner %}
+                {% set form_id = 'apply-backup-' ~ loop.index0 %}
+                <div class="template-actions">
+                    <form id="{{ form_id }}" action="{{ url_for('apply_guild_template', guild_id=guild_id, template_name=template.filename) }}" method="post" style="display:inline-block; margin-bottom:8px;" onsubmit="showSpinnerAndDisable(this)">
+                        <button type="submit" class="apply-btn">Apply to Guild</button>
+                        <span class="spinner" style="display:none;margin-left:8px;vertical-align:middle;"></span>
+                    </form>
+                    <button type="button"
+                        class="backup-title-hover"
+                        title="Click to apply this backup"
+                        onclick="if(confirm('Are you sure you want to apply this backup to your guild? This will overwrite your current settings.')) { document.getElementById('{{ form_id }}').submit(); }"
+                        style="background:none; border:none; padding:2px 6px; font:inherit; color:#43b581; font-weight:bold; border-radius:4px; cursor:pointer;">
+                        Backup File
+                    </button><br>
+                </div>
+            {% else %}
+                <div class="template-actions">
+                    <span class="backup-title-hover">Backup File</span><br>
+                </div>
+            {% endif %}
+        {% elif template.guild_id is defined %}
+            <span style="font-size:1.05em; color:#faa61a; font-weight:bold;">Template Guild ID: {{ template.guild_id }}</span><br>
+            <div class="template-actions">
+                <a href="https://discord.new/{{ template.guild_id }}" target="_blank" style="color:#faa61a; text-decoration:underline; font-size:0.98em;">Open Discord Template</a><br>
+                <a href="/templates/{{ template.filename }}" download style="color:#43b581; font-size:0.98em; margin-right:10px;">Download Template JSON</a>
+            </div>
+        {% else %}
+            <span style="font-size:1.05em; color:#faa61a; font-weight:bold;">Template: {{ template.filename if template.filename is defined else template }}</span><br>
+            <div class="template-actions">
+                <a href="/templates/{{ template.filename if template.filename is defined else template }}" download style="color:#43b581; font-size:0.98em; margin-right:10px;">Download Template JSON</a>
+            </div>
+        {% endif %}
+
+        <span style="font-size:0.9em; color:#aaa;">File: {{ template.filename if template.filename is defined else 'Unknown' }}</span>
+    </div>
+
+    {# --- Apply to Guild (Owner Only) --- #}
+    <div class="template-actions">
+    <form action="{{ url_for('apply_guild_template', guild_id=guild_id, template_name=template.filename if template.filename is defined else template) }}" method="post" style="display:inline-block;">
+        <button type="submit" class="apply-btn" onclick="return confirm('Are you sure you want to apply this template to your guild? This will overwrite your current settings.')">Apply to Guild</button>
+    </form>
+</div>
+</div>
+        {% endfor %}
+    </div>
+    <!-- Drag-and-drop drop zone, styled to match grid width -->
+    <div id="drop-zone" class="drop-zone" tabindex="0" aria-label="Drop a template here to apply to this guild" style="margin-top:24px; max-width:100%;">
+        <span id="drop-zone-text">Drop a template here to apply to this guild</span>
+    </div>
+    <!-- Upload and apply template from file -->
+    <form id="upload-template-form" action="{{ url_for('apply_uploaded_template', guild_id=guild_id) }}" method="post" enctype="multipart/form-data" style="margin-top:24px; background:#23272a; padding:18px; border-radius:8px; border:1px solid #faa61a; max-width:100%;">
+        <label for="template_file"><b>Apply Settings from File:</b></label>
+        <input type="file" id="template_file" name="template_file" accept=".json" required style="margin-left:8px;">
+        <button type="submit" class="apply-btn" style="margin-left:8px;">Upload & Apply</button>
+        <div style="color:#aaa; font-size:0.97em; margin-top:6px;">Select a previously downloaded template JSON file to apply its settings to this guild.</div>
+    </form>
+</div>
+<script>
+// Store the dragged template name
+let draggedTemplate = null;
+
+function handleDragStart(event, templateName) {
+    draggedTemplate = templateName;
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', templateName);
+}
+
+const dropZone = document.getElementById('drop-zone');
+dropZone.addEventListener('dragover', function(event) {
+    event.preventDefault();
+    dropZone.classList.add('drag-over');
+    document.getElementById('drop-zone-text').textContent = 'Release to apply template';
+});
+dropZone.addEventListener('dragleave', function(event) {
+    dropZone.classList.remove('drag-over');
+    document.getElementById('drop-zone-text').textContent = 'Drop a template here to apply to this guild';
+});
+dropZone.addEventListener('drop', function(event) {
+    event.preventDefault();
+    dropZone.classList.remove('drag-over');
+    document.getElementById('drop-zone-text').textContent = 'Applying template...';
+    const templateName = event.dataTransfer.getData('text/plain') || draggedTemplate;
+    // AJAX POST to apply template
+    const applyUrl = "{{ url_for('apply_guild_template', guild_id=guild_id, template_name='TEMPLATE_PLACEHOLDER') }}".replace('TEMPLATE_PLACEHOLDER', encodeURIComponent(templateName));
+    fetch(applyUrl, {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    })
+    .then(response => {
+        if (response.ok) {
+            document.getElementById('drop-zone-text').textContent = 'Template applied!';
+            setTimeout(() => document.getElementById('drop-zone-text').textContent = 'Drop a template here to apply to this guild', 2000);
+            // Optionally refresh or show a toast
+        } else {
+            document.getElementById('drop-zone-text').textContent = 'Failed to apply template';
+        }
+    })
+    .catch(() => {
+        document.getElementById('drop-zone-text').textContent = 'Error applying template';
+    });
+});
+</script>
+        {% else %}
+        <div class="no-templates">
+    <strong>No templates found for this guild.</strong><br>
+    {% if not is_owner %}
+        <span style="color:#faa61a;">Only the <b>guild owner</b> can create and view templates. If you are not the owner, please ask the owner to log in and manage templates for this guild.</span>
+    {% else %}
+        <span style="color:#faa61a;">You are the guild owner. You can create a new template from the dashboard or by saving your current settings.</span>
+    {% endif %}
+</div>
+        {% endif %}
+    </div>
+<script>
+function showSpinnerAndDisable(form) {
+    var btn = form.querySelector('button[type="submit"]');
+    var spinner = form.querySelector('.spinner');
+    if (btn && spinner) {
+        btn.disabled = true;
+        spinner.style.display = 'inline-block';
+        spinner.innerHTML = `<svg width="20" height="20" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="#faa61a" stroke-width="6" stroke-linecap="round" stroke-dasharray="31.4 31.4" transform="rotate(-90 25 25)"><animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.8s" repeatCount="indefinite"/></circle></svg>`;
+    }
+    return true;
+}
+</script>
+</body>
+<style>
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #23272a; color: #fff; margin: 0; }
+.header { background: #202225; padding: 0.7rem 0; box-shadow: 0 2px 8px #0008; }
+.header-content { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.logo { font-size: 1.4rem; color: #faa61a; font-weight: bold; }
+nav a { color: #faa61a; margin-left: 2rem; text-decoration: none; font-weight: 500; }
+nav a:hover { text-decoration: underline; }
+.container { max-width: 900px; margin: 40px auto; background: #2c2f33; padding: 40px 32px 32px 32px; border-radius: 10px; box-shadow: 0 2px 12px #000a; }
+h1 { color: #faa61a; margin-bottom: 32px; }
+.guild-id { color: #fff; font-size: 1rem; opacity: 0.7; }
+.templates-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: flex-start;
+    margin-top: 18px;
+}
+.template-card { background: #23272a; border-radius: 8px; box-shadow: 0 1px 6px #0005; padding: 22px 18px 16px 18px; display: flex; flex-direction: column; align-items: start; }
+.template-info { margin-bottom: 18px; }
+.template-name { font-size: 1.1rem; font-weight: 600; color: #faa61a; }
+.backup-title-hover {
+    color: #43b581;
+    font-weight: bold;
+    transition: background 0.15s, color 0.15s;
+    border-radius: 4px;
+    padding: 2px 6px;
+}
+.backup-title-hover:hover, .backup-title-hover:focus, .backup-title-hover:active {
+    background: #2ecc40;
+    color: #fff;
+    box-shadow: 0 0 6px #43b58188;
+    cursor: pointer;
+    outline: 2px solid #43b581;
+}
+.apply-btn { background: #faa61a; color: #23272a; border: none; padding: 9px 22px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.15s; }
+.apply-btn:hover { background: #ffbb3b; }
+.no-templates { color: #faa61a; font-size: 1.1rem; margin-top: 30px; }
+</style>
+</html>

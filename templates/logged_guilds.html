@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logged Guilds</title>
+    <style>
+        body { background: #23272a; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; }
+        .container { max-width: 900px; margin: 40px auto; background: #2c2f33; border-radius: 10px; box-shadow: 0 2px 16px #0006; padding: 38px 34px 28px 34px; }
+        h1 { color: #43b581; text-align: center; margin-bottom: 30px; }
+        table { width: 100%; border-collapse: collapse; background: #23272a; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 13px 18px; text-align: left; border-bottom: 1px solid #36393f; }
+        th { background: #43b581; color: #fff; font-weight: bold; }
+        tr:hover { background: #36393f; }
+        td a { color: #faa61a; text-decoration: none; font-weight: bold; }
+        td a:hover { text-decoration: underline; color: #ffbb3b; }
+        .back-btn { margin-top: 28px; display: block; background: #7289da; color: #fff; padding: 10px 32px; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; }
+        .back-btn:hover { background: #5a6fb2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Logged Guilds</h1>
+        {% if logged_guilds %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Guild Name (ID)</th>
+<th>Owner ID</th>
+                    <th>Messages Logged</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for guild in logged_guilds %}
+                <tr>
+                    <td>{{ guild.name }} ({{ guild.id }})</td>
+<td><span style="color:#888;font-style:italic;">Hidden</span></td>
+                    <td>{{ guild.message_count }}</td>
+                    <td>
+                        <a href="/guild/{{ guild.id }}/messages">View Messages</a>
+                        |
+                        <a href="/guild/{{ guild.id }}/templates">View Templates</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="color:#faa61a;text-align:center;">No logged guilds found.</p>
+        {% endif %}
+
+        <h2 style="color:#43b581;margin-top:48px;text-align:center;">All Logged Messages</h2>
+        {% if all_guild_messages and all_guild_messages|length > 0 %}
+        <table style="margin-top:18px;">
+            <thead>
+                <tr>
+                    <th>Guild Name</th>
+                    <th>Channel</th>
+                    <th>Author</th>
+                    <th>Content</th>
+                    <th>Timestamp</th>
+                    <th>Event</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for msg in all_guild_messages %}
+                <tr>
+                    <td>{{ msg.guild_name }}</td>
+                    <td>{{ msg.channel }}</td>
+                    <td>{{ msg.author }}</td>
+                    <td style="max-width:350px;overflow-wrap:anywhere;">{{ msg.content }}</td>
+                    <td>{{ msg.timestamp }}</td>
+                    <td>{{ msg.event }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="color:#faa61a;text-align:center;">No messages have been logged for any guild.</p>
+        {% endif %}
+
+        <a href="{{ url_for('portal') }}" class="back-btn">Back to Portal</a>
+    </div>
+</body>
+</html>

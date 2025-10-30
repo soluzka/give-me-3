@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Bot Portal</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #1e1e2f;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: #23272a;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+        h1, h2 {
+            color: #7289da;
+            text-align: center;
+        }
+        .guild-link {
+            color: #faa61a;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        .guild-link:hover {
+            color: #ffbb3b;
+            text-decoration: underline;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #2c2f33;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #3b3f45;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.25em 0.6em;
+            font-size: 0.9em;
+            border-radius: 0.35em;
+            font-weight: 600;
+            margin-right: 0.3em;
+        }
+        .badge-success { background: #43b581; color: #fff; }
+        .badge-warning { background: #faa61a; color: #23272a; }
+        .badge-danger { background: #f04747; color: #fff; }
+        button:hover { background: #5865f2; color: #fff; }
+        @media (max-width: 800px) {
+            table, thead, tbody, th, td, tr { display: block; }
+            table tr { margin-bottom: 15px; }
+            table td, table th { text-align: right; }
+        }
+        table th {
+            background-color: #7289da;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        table tr:hover {
+            background-color: #3b3f45;
+        }
+        table td {
+            color: #99aab5;
+        }
+        button, input[type="text"], input[type="number"] {
+            padding: 10px 15px;
+            font-size: 14px;
+            border: 1px solid #7289da;
+            border-radius: 5px;
+            background: #2c2f33;
+            color: #ffffff;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+        button {
+            cursor: pointer;
+            background-color: #7289da;
+        }
+        button:hover {
+            background-color: #5a6fb2;
+        }
+        input[type="text"], input[type="number"] {
+            width: calc(100% - 30px);
+        }
+        input[type="text"]::placeholder, input[type="number"]::placeholder {
+            color: #99aab5;
+        }
+        form {
+            margin-top: 15px;
+        }
+        a {
+            color: #7289da;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    .quick-link-btn {
+    background: #faa61a;
+    color: #23272a;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 12px;
+    transition: background 0.15s;
+}
+.quick-link-btn:hover {
+    background: #ffbb3b;
+}
+.guild-id-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+</style>
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes" style="list-style:none;padding:0;margin-bottom:20px;">
+            {% for category, message in messages %}
+                <li class="flash-{{ category }} badge badge-{{ category }}" style="margin-bottom:6px;padding:10px 18px;">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <a href="/logged_guilds" class="badge badge-success" style="display:inline-block;margin-bottom:18px;font-size:1.1em;padding:10px 24px;text-decoration:none;">View All Guild Messages</a>
+    <button onclick="document.getElementById('guild-id-form').scrollIntoView({behavior: 'smooth'});" class="quick-link-btn">
+        View Templates by Guild ID
+    </button>
+    <form action="{{ url_for('list_guild_templates_redirect') }}" method="post" id="guild-id-form" class="guild-id-form" style="margin-top: 24px;">
+        <label for="guild_id"><b>Enter your Guild ID:</b></label>
+        <input type="text" id="guild_id" name="guild_id" required pattern="\d+" placeholder="Guild ID" style="margin-left: 10px; padding: 6px;">
+        <button type="submit" style="padding: 6px 18px;">View Templates</button>
+    </form>
+    <div class="container">
+        <div style="background:#23272a;border-left:5px solid #ff5555;padding:16px 24px;margin-bottom:18px;border-radius:8px;">
+            <strong>Template Usage Notice:</strong><br>
+            <span style="color:#ffaaaa;">You <b>cannot</b> use or apply templates for a guild unless you are the <b>guild owner</b> and are registered as a role owner in the portal.<br>
+            If you do not have the owner role, template actions will be unavailable.</span>
+        </div>
+        <div style="background:#23272a;border-left:5px solid #faa61a;padding:16px 24px;margin-bottom:24px;border-radius:8px;">
+            <strong>Moderation Permissions:</strong><br>
+            Users can use moderation commands (e.g., tempban, ban, kick) if they have <b>administrator permissions</b>, the <b>owner role</b>, or any of these role names: <span style="color:#faa61a;font-weight:bold">Admin</span>, <span style="color:#faa61a;font-weight:bold">Moderator</span>, <span style="color:#faa61a;font-weight:bold">Owner</span> (case-insensitive).
+        </div>
+
+    <div class="container">
+        <h1>Discord Bot Portal</h1>
+        {% if templates_creation_result %}
+            <div style="background: #43b581; color: #fff; padding: 12px 20px; border-radius: 6px; margin-bottom: 18px; font-size: 1.1em; text-align: center;">
+                {{ templates_creation_result }}
+            </div>
+        {% endif %}
+
+        <h2 style="color:#faa61a;margin-top:32px;">Guilds You Are In (But Don't Own)</h2>
+        {% if guilds_user_in_not_owner and guilds_user_in_not_owner|length > 0 %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Guild Name</th>
+                    <th>Owner</th>
+                    <th>Automod</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for guild in guilds_user_in_not_owner %}
+                <tr>
+                    <td><a href="{{ url_for('guild_messages', guild_id=guild.id) }}" class="guild-link">{{ guild.name }}</a></td>
+                    <td>{{ guild.owner_name }}</td>
+                    <td>{{ 'Enabled' if guild.automod_enabled else 'Disabled' }}</td>
+                    <td><a href="{{ url_for('guild_messages', guild_id=guild.id) }}" class="badge badge-success">View Messages</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div style="color:#aaa;margin-bottom:18px;">You do not belong to any guilds (with the bot) that you do not own.</div>
+        {% endif %}
+
+<!-- ================= LOGGED SERVERS AND SETTINGS (ROBUST SECTION) ================= -->
+<h2>Logged Servers and Settings</h2>
+<div id="logged-servers-section">
+    <table id="logged-servers-table">
+        <thead>
+            <tr>
+                <th>Guild Name (ID)</th>
+<th>Owner ID</th>
+<th>Actions</th>
+<th>Automod</th>
+<th>Latest Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dynamic rows will be inserted here -->
+        </tbody>
+    </table>
+    <div class="no-guilds" style="display:none;">No logged servers found.</div>
+</div>
+<script>
+function updateLoggedServers() {
+    fetch('/api/portal_guilds')
+        .then(response => response.json())
+        .then(data => {
+            const table = document.getElementById('logged-servers-table').getElementsByTagName('tbody')[0];
+            const noGuildsDiv = document.querySelector('#logged-servers-section .no-guilds');
+            table.innerHTML = '';
+            if (!data.guilds || data.guilds.length === 0) {
+                noGuildsDiv.style.display = '';
+                document.getElementById('logged-servers-table').style.display = 'none';
+                return;
+            }
+            noGuildsDiv.style.display = 'none';
+            document.getElementById('logged-servers-table').style.display = '';
+            data.guilds.forEach(guild => {
+                const row = document.createElement('tr');
+
+                // Guild name and link
+                const nameCell = document.createElement('td');
+                const nameLink = document.createElement('a');
+                nameLink.href = `/guild/${guild.id}/messages`;
+                nameLink.className = 'guild-link';
+                nameLink.textContent = `${guild.name} (${guild.id})`;
+                nameLink.title = `View messages for ${guild.name}`;
+                nameCell.appendChild(nameLink);
+                row.appendChild(nameCell);
+// Owner ID cell
+const ownerIdCell = document.createElement('td');
+let ownerId = 'Hidden';
+ownerIdCell.innerHTML = `<span style='font-style:italic;'>${ownerId}</span>`;
+row.appendChild(ownerIdCell);
+
+                // Actions cell
+                const actionsCell = document.createElement('td');
+                actionsCell.style.whiteSpace = 'nowrap';
+
+                // Messages link
+                const msgLink = document.createElement('a');
+                msgLink.href = `/guild/${guild.id}/messages`;
+                msgLink.className = 'badge badge-success';
+                msgLink.textContent = 'Messages';
+                msgLink.title = 'View all logged messages for this guild';
+                actionsCell.appendChild(msgLink);
+
+                // Templates link
+                const tplLink = document.createElement('a');
+                tplLink.href = `/guild/${guild.id}/templates`;
+                tplLink.className = 'badge badge-warning';
+                tplLink.textContent = 'Templates';
+                tplLink.title = 'View or apply templates for this guild';
+                actionsCell.appendChild(tplLink);
+
+                // Download Settings link
+                const dlLink = document.createElement('a');
+                dlLink.href = `/download_guild_settings/${guild.id}`;
+                dlLink.className = 'badge badge-info';
+                dlLink.textContent = 'Download Settings';
+                dlLink.title = 'Download current settings for this guild';
+                actionsCell.appendChild(dlLink);
+
+                row.appendChild(actionsCell);
+
+                // Automod status
+                const automodCell = document.createElement('td');
+                automodCell.textContent = guild.automod_enabled ? 'Enabled' : 'Disabled';
+                automodCell.title = guild.automod_enabled ? 'Automod is enabled' : 'Automod is disabled';
+                row.appendChild(automodCell);
+
+                // Latest message
+                const msgCell = document.createElement('td');
+                if (guild.latest_message && guild.latest_message.content) {
+                    msgCell.innerHTML = `<div><strong>${guild.latest_message.author}</strong>: ${guild.latest_message.content}</div>` +
+                        `<div style="font-size:0.85em;color:#aaa;">${guild.latest_message.timestamp}</div>`;
+                    msgCell.title = 'Most recent logged message';
+                } else {
+                    msgCell.innerHTML = '<em>No messages logged</em>';
+                    msgCell.title = 'No messages have been logged for this guild yet';
+                }
+                row.appendChild(msgCell);
+
+                table.appendChild(row);
+            });
+        });
+}
+updateLoggedServers();
+setInterval(updateLoggedServers, 10000);
+</script>
+
+<!-- ================= END LOGGED SERVERS AND SETTINGS ================= -->
+
+        <h2>Guilds Dashboard</h2>
+<form method="POST" action="{{ url_for('backup_all_guilds') }}" style="margin-bottom:20px;display:inline-block;">
+    <button type="submit" class="badge badge-success">Back Up All Discord Guilds</button>
+</form>
+<form method="POST" action="{{ url_for('create_templates_for_all_logs') }}" style="margin-bottom:20px;">
+    <button type="submit" class="badge badge-warning">Create Templates for All Guild Logs</button>
+</form>
+{% if templates_creation_result %}
+    <div style="margin-bottom:15px;color:#43b581;font-weight:bold;">{{ templates_creation_result }}</div>
+{% endif %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Guild Name (ID)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for guild in guilds %}
+                <tr>
+                    <td><a href="{{ url_for('guild_messages', guild_id=guild.id) }}" class="guild-link">{{ guild.name }} ({{ guild.id }})</a></td>
+                    <td>
+                        <a href="{{ url_for('guild_messages', guild_id=guild.id) }}" class="badge badge-success">Messages</a>
+                        <a href="{{ url_for('list_guild_templates', guild_id=guild.id) }}" class="badge badge-warning">Templates</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h2>Servers the Bot is In</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Server Name</th>
+                    <th>Owner Name</th>
+                    <th>Owner ID</th>
+                    <th>Automod Enabled</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for guild in bot_guilds %}
+                <tr>
+                    <td>{{ guild.name }}</td>
+                    <td>{{ guild.owner_name }}</td>
+                    <td>Hidden</td>
+                    <td>{{ guild.automod_enabled }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <h2>Servers the Bot is In</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Server Name</th>
+                    <th>Owner</th>
+                    <th>Bot Role Status</th>
+                    <th>Automod</th>
+                    <th>Actions</th>
+                    <th>Spam Detection</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for guild in bot_guilds %}
+                <tr>
+                    <td><a href="{{ url_for('guild_messages', guild_id=guild.id) }}" style="color:#faa61a; text-decoration:underline;">{{ guild.name }}</a></td> <!-- Display server name as link -->
+<td>
+    {% if guild.latest_message and guild.latest_message.content %}
+        <div><strong>{{ guild.latest_message.author }}</strong>: {{ guild.latest_message.content }}</div>
+        <div style="font-size:0.85em;color:#aaa;">{{ guild.latest_message.timestamp }}</div>
+    {% else %}
+        <em>No messages logged</em>
+    {% endif %}
+</td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <!-- Automod & Timeout Info Section -->
+                        <div style="background:#23272a;border-radius:6px;padding:10px 15px;margin-bottom:10px;color:#faa61a;font-size:0.95em;">
+                            <strong>Automod & Timeout Rules:</strong><br>
+                            When automod is triggered <strong>{{ guild.automod_threshold or 5 }}</strong> times within <strong>{{ guild.automod_time_window or 10 }}</strong> seconds, the user will be timed out for <strong>{{ guild.timeout_duration or 60 }}</strong> seconds.<br>
+                            <span style="color:#aaa;font-size:0.95em;">(Defaults: threshold=5, window=10s, timeout=60s)</span>
+                        </div>
+                        <form method="POST" action="{{ url_for('update_spam_settings') }}">
+                            <input type="hidden" name="guild_id" value="{{ guild.id }}">
+                            <label for="spam_threshold_{{ guild.id }}">Threshold:</label>
+                            <input type="number" id="spam_threshold_{{ guild.id }}" name="spam_threshold" value="{{ server_settings[guild.id].get('spam_threshold', 5) }}" min="1">
+                            <label for="spam_time_window_{{ guild.id }}">Time Window (s):</label>
+                            <input type="number" id="spam_time_window_{{ guild.id }}" name="spam_time_window" value="{{ server_settings[guild.id].get('spam_time_window', 10) }}" min="1">
+                            <button type="submit">Update</button>
+                        </form>
+                        <form method="POST" action="{{ url_for('set_timeout', guild_id=guild.id) }}" style="margin-bottom:8px;">
+                            <input type="hidden" name="guild_id" value="{{ guild.id }}">
+                            <input type="hidden" name="timeout_enabled" value="{% if server_settings[guild.id].get('timeout_enabled', True) %}false{% else %}true{% endif %}">
+                            <label for="timeout_duration_guild_{{ guild.id }}">Timeout Duration (s):</label>
+                            <input type="number" id="timeout_duration_guild_{{ guild.id }}" name="timeout_duration" value="{{ server_settings[guild.id].get('timeout_duration', 60) }}" min="1">
+                            <button type="submit"
+                                class="{% if not server_settings[guild.id].get('timeout_enabled', True) %}automod-off{% else %}automod-on{% endif %}"
+                                title="Timeout must be enabled for moderation timeouts to work.">
+                                {% if not server_settings[guild.id].get('timeout_enabled', True) %}Force Enable Timeout{% else %}Disable Timeout{% endif %}
+                            </button>
+                        </form>
+
+                    </td>
+                    <td>
+                        <!-- Automod Toggle (Owner Role Only) -->
+                        {% if guild.user_is_owner or guild.user_has_owner_role %}
+                        <form method="POST" action="{{ url_for('toggle_automod') }}">
+                            <input type="hidden" name="guild_id" value="{{ guild.id }}">
+                            <input type="hidden" name="user_id" value="{{ discord_user.id }}">
+                            <input type="hidden" name="automod_enabled" value="true">
+                            <button type="submit"
+                            class="{% if not guild.automod_enabled %}automod-off{% else %}automod-on{% endif %}"
+                            title="Automod must be enabled for moderation features to work.">
+                            {% if not guild.automod_enabled %}Force Enable Automod{% else %}Disable Automod{% endif %}
+                            </button>
+                        </form>
+                        {% else %}
+                        <button type="button" disabled title="Only the server owner or users with the owner role can toggle automod." style="opacity:0.6;cursor:not-allowed;margin-top:10px;">Toggle Automod</button>
+                        <div style="color:#faa61a;font-size:0.95em;">Only the server owner or users with the owner role can toggle automod.</div>
+                        {% endif %}
+
+                        <!-- Apply Default Automod Rules (Owner Role Only) -->
+                        {% if guild.user_is_owner or guild.user_has_owner_role %}
+                        <form method="POST" action="{{ url_for('apply_default_automod_rules') }}">
+                            <input type="hidden" name="guild_id" value="{{ guild.id }}">
+                            <button type="submit">Apply Default Automod Rules</button>
+                        </form>
+                        <!-- Reset Template to Default (Guild Owner Only) -->
+                        {% if guild.user_is_owner %}
+                        <form method="POST" action="{{ url_for('reset_guild_template') }}" style="margin-top:8px;">
+                            <input type="hidden" name="guild_id" value="{{ guild.id }}">
+                            <button type="submit" class="badge badge-danger" onclick="return confirm('Are you sure you want to reset this guild\'s settings to default? This cannot be undone.');">Reset Template to Default</button>
+                        </form>
+                        {% endif %}
+                        {% else %}
+                        <button type="button" disabled title="Only the server owner or users with the owner role can apply default automod rules." style="opacity:0.6;cursor:not-allowed;margin-top:10px;">Apply Default Automod Rules</button>
+                        <div style="color:#faa61a;font-size:0.95em;">Only the server owner or users with the owner role can apply default automod rules.</div>
+                        {% endif %}
+
+                        <!-- Update Blocked Keywords -->
+                        <form method="POST" action="{{ url_for('update_keywords') }}">
+                            <input type="hidden" name="guild_id" value="{{ guild.id }}">
+                            <input type="text" name="keywords" placeholder="Comma-separated keywords" value="{{ guild.blocked_keywords | join(', ') }}">
+                            <button type="submit">Update Keywords</button>
+                        </form>
+
+                        <!-- Update Regex Patterns -->
+                        <form method="POST" action="{{ url_for('update_regex') }}">
+                            <input type="hidden" name="guild_id" value="{{ guild.id }}">
+                            <input type="text" name="regex_patterns" placeholder="Comma-separated regex patterns" value="{{ guild.regex_patterns | join(', ') }}">
+                            <button type="submit">Update Regex</button>
+                        </form>
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Logged Servers and Settings</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Server Name</th>
+<th>Latest Message</th>
+<th>Automod</th>
+<th>Owner</th>
+                    <th>Owner Role</th>
+                    <th>Owner Roles</th> <!-- New column for multiple roles -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for guild in bot_guilds %}
+                <tr>
+                    <td><a href="{{ url_for('guild_messages', guild_id=guild.id) }}" style="color:#faa61a; text-decoration:underline;">{{ guild.name }}</a></td>
+<td>
+    {% if guild.latest_message and guild.latest_message.content %}
+        <div><strong>{{ guild.latest_message.author }}</strong>: {{ guild.latest_message.content }}</div>
+        <div style="font-size:0.85em;color:#aaa;">{{ guild.latest_message.timestamp }}</div>
+    {% else %}
+        <em>No messages logged</em>
+    {% endif %}
+</td>
+<td>{{ 'Enabled' if guild.automod_enabled else 'Disabled' }}</td>
+        <td>
+            {{ guild.owner_name }} (ID: <span style="color:#888;font-style:italic;">Hidden</span>)
+        </td>
+                    <td>{{ guild.owner_role_name or 'Not Set' }}</td>
+                    <td>
+                        {% if guild.owner_roles %}
+                            <ul style="list-style:none; margin:0; padding:0;">
+                                {% for role in guild.owner_roles %}
+                                <li>
+                                    <span style="color:#faa61a; font-weight:bold;">{{ role }}</span>
+                                    <a href="{{ url_for('guild_messages', guild_id=guild.id) }}" class="badge badge-success" style="margin-left:8px;">Block then View</a>
+                                    <form method="POST" action="{{ url_for('create_template') }}" style="display:inline; margin-left:8px;">
+                                        <input type="hidden" name="guild_id" value="{{ guild.id }}">
+                                        <input type="hidden" name="owner_role" value="{{ role }}">
+                                        <button type="submit" class="badge badge-warning">Create Template</button>
+                                    </form>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <em>No owner roles set</em>
+                        {% endif %}
+                    </td>
+                        {% if guild.owner_roles %}
+                            {{ guild.owner_roles | join(', ') }}
+                        {% else %}
+                            No roles assigned
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>All Logged Guilds</h2>
+        <button id="save-all-templates-btn" class="badge badge-warning" style="margin-bottom:16px;">Save Templates for All Guilds</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Server Name</th>
+<th>Latest Message</th>
+<th>Automod</th>
+<th>Blocked Keywords</th>
+                    <th>Regex Patterns</th>
+                    <th>Spam Threshold</th>
+                    <th>Spam Time Window</th>
+                    <th>Owner</th>
+                    <th>Actions</th> <!-- Added column for actions -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for guild in logged_guilds %}
+                <tr>
+                    <td><a href="{{ url_for('guild_messages', guild_id=guild.id) }}" style="color:#faa61a; text-decoration:underline;">{{ guild.name }}</a></td>
+<td>
+    {% if guild.latest_message and guild.latest_message.content %}
+        <div><strong>{{ guild.latest_message.author }}</strong>: {{ guild.latest_message.content }}</div>
+        <div style="font-size:0.85em;color:#aaa;">{{ guild.latest_message.timestamp }}</div>
+    {% else %}
+        <em>No messages logged</em>
+    {% endif %}
+</td>
+<td>{{ 'Enabled' if guild.automod_enabled else 'Disabled' }}</td>
+<td>{{ guild.blocked_keywords | join(', ') }}</td>
+                    <td>{{ guild.regex_patterns | join(', ') }}</td>
+                    <td>{{ guild.spam_threshold or 5 }}</td>
+<td>{{ guild.spam_time_window or 10 }}</td>
+                    <td>{{ guild.owner_name }} (ID: <span style="color:#888;font-style:italic;">Hidden</span>)
+{% if discord_user and discord_user.id != guild.owner_id %}
+    <div style="color:#e74c3c;font-size:0.9em;">You are not the owner of this guild. Settings may be restricted.</div>
+{% endif %}
+</td>
+<td>
+    <form method="GET" action="{{ url_for('download_guild_settings', guild_id=guild.id) }}">
+        <button type="submit">Download Settings</button>
+    </form>
+    <form method="POST" action="{{ url_for('set_timeout', guild_id=guild.id) }}" style="margin-top:5px;" onsubmit="return confirm('Saving a template will overwrite the previous template for this guild. Continue?');">
+        <button type="submit">Save Template</button>
+    </form>
+
+</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Servers You Can Add the Bot To</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Server Name</th>
+                    <th>Owner Role</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for guild in user_guilds_with_permissions %}
+                <tr>
+                    <td>{{ guild.name }}</td>
+                    <td>{% if guild.owner_role and guild.owner_role != 'Unknown' and not guild.owner_role.startswith('Role ID:') %}{{ guild.owner_role }}{% else %}<span style="color:#faa61a;">Not Set (will be set after bot is invited)</span>{% endif %}</td>
+                    <td>
+                        <a href="https://discord.com/oauth2/authorize?client_id={{ 1285549408087310408 }}&permissions=8&scope=bot&guild_id={{ guild.id }}" target="_blank">
+                            Add Bot
+                        </a>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Set Owner Role</h2>
+<p style="color:#faa61a;font-weight:bold;">The server owner is determined by a role name, <u>not</u> a user ID. Assign a role by its <strong>name</strong> to set who is considered the owner in the portal and bot features.</p>
+<p>Only the guild owner can assign the owner role.</p>
+<form method="POST" action="{{ url_for('set_owner_role_web') }}">
+    <label for="guild_id">Guild ID:</label>
+    <input type="text" id="guild_id" name="guild_id" required>
+    <label for="role_name">Owner Role Name:</label>
+    <input type="text" id="role_name" name="role_name" placeholder="Enter role name (e.g., Owner)" required>
+    <span style="font-size:0.95em;color:#aaa;">(The bot will assign this role by <strong>name</strong>. Make sure the role exists in your Discord server!)</span><br>
+    <button type="submit">Set Owner Role</button>
+</form>
+
+        <h2>Bot Commands for Portal Settings</h2>
+        <p>Use the following commands in your server to update portal settings:</p>
+        <ul>
+            <li><strong>Automod:</strong> <code>/set_portal_settings automod enabled|disabled</code></li>
+            <li><strong>Blocked Keywords:</strong> <code>/set_portal_settings blocked_keywords keyword1 keyword2 ...</code></li>
+            <li><strong>Regex Patterns:</strong> <code>/set_portal_settings regex_patterns pattern1 pattern2 ...</code></li>
+            <li><strong>Spam Settings:</strong> <code>/set_portal_settings spam_settings threshold time_window</code></li>
+        </ul>
+    </div>
+    <script>
+        async function toggleAutomod(guildId, enabled) {
+            try {
+                const response = await fetch('{{ url_for("toggle_automod_server") }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ guild_id: guildId, enabled: enabled })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    const errorData = await response.json();
+                    alert(errorData.error || 'Failed to toggle automod.');
+                }
+            } catch (error) {
+                alert('An unexpected error occurred. Please try again later.');
+                console.error(error);
+            }
+        }
+    </script>
+  </a>
+</body>
+</html>

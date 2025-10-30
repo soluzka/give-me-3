@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Guild Messages</title>
+    <style>
+        body { background: #23272a; color: #fff; font-family: 'Roboto', sans-serif; }
+        .container { max-width: 900px; margin: 40px auto; background: #2c2f33; padding: 40px 32px 32px 32px; border-radius: 10px; box-shadow: 0 2px 12px #000a; }
+        h1 { color: #7289da; text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #23272a; border-radius: 8px; }
+        th, td { padding: 10px; border-bottom: 1px solid #3b3f45; }
+        th { background: #7289da; color: #fff; }
+        tr:last-child td { border-bottom: none; }
+        .timestamp { color: #aaa; font-size: 0.9em; }
+        .guild-settings-card { border-radius: 12px; box-shadow: 0 2px 8px #0008; padding: 24px 30px 18px 30px; margin-bottom: 32px; transition: background 0.3s, border-color 0.3s; }
+        .guild-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .guild-title { font-size: 1.4rem; color: #faa61a; font-weight: bold; }
+        .guild-id { color: #bbb; font-size: 1rem; opacity: 0.8; }
+        .guild-settings > div { margin-bottom: 6px; }
+        .badge { display: inline-block; padding: 2px 12px; border-radius: 8px; font-weight: 600; font-size: 0.97em; margin-left: 7px; }
+        .automod-status.enabled { background: #2ecc40; color: #fff; }
+        .automod-status.disabled { background: #ffb347; color: #23272a; }
+        .timeout-status.enabled { background: #7289da; color: #fff; }
+        .timeout-status.disabled { background: #888; color: #fff; }
+        .keywords, .patterns { color: #faa61a; }
+        .blocked-count { color: #ff5555; font-weight: 600; }
+        .total-count { color: #aaa; }
+        .messages-list { display: flex; flex-direction: column; gap: 18px; }
+        .message-card { background: #202225; border-radius: 8px; box-shadow: 0 1px 6px #0005; padding: 18px 20px 14px 20px; color: #fff; transition: box-shadow 0.15s;  }
+        .message-card.blocked { background: #3a2323; color: #ffb3b3; border-left: 5px solid #ff5555; }
+        .msg-header { display: flex; align-items: center; gap: 18px; margin-bottom: 6px; }
+        .msg-author { font-weight: 600; color: #faa61a; }
+        .msg-channel { color: #aaa; font-size: 0.97rem; }
+        .msg-event { font-size: 0.98rem; color: #7289da; background: #23272a; padding: 2px 10px; border-radius: 6px; margin-left: auto; }
+        .msg-event.blocked-label { color: #fff; background: #ff5555; font-weight: 600; }
+        .msg-content { margin-bottom: 7px; font-size: 1.08rem; word-break: break-word; }
+        .msg-footer { text-align: right; font-size: 0.96rem; color: #bbb; }
+        .no-messages { text-align: center; color: #faa61a; font-size: 1.1rem; margin-top: 30px; }
+        .header { background: #202225; padding: 0.7rem 0; box-shadow: 0 2px 8px #0008; }
+        .header-content { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .logo { font-size: 1.4rem; color: #faa61a; font-weight: bold; }
+        nav a { color: #faa61a; margin-left: 2rem; text-decoration: none; font-weight: 500; }
+        nav a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <span class="logo">Discord Portal</span>
+            <nav>
+                <a href="{{ url_for('portal') }}">Portal Home</a>
+                <a href="{{ url_for('list_guild_templates_portal', guild_id=guild_id) }}">View Templates</a>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <div class="guild-settings-card" style="border-left: 8px solid {{ custom_color }}; background: {% if automod_enabled %}#232f23{% else %}#23272a{% endif %};">
+            <div class="guild-header">
+                <span class="guild-title">{{ guild_name }}</span>
+                <span class="guild-id">ID: {{ guild_id }}</span>
+            </div>
+            <div class="guild-settings">
+                <div><b>Automod:</b> <span class="automod-status badge {{ 'enabled' if automod_enabled else 'disabled' }}">{{ 'Enabled' if automod_enabled else 'Disabled' }}</span></div>
+                <div><b>Timeout:</b> <span class="timeout-status badge {{ 'enabled' if timeout_enabled else 'disabled' }}">{{ 'On' if timeout_enabled else 'Off' }}</span></div>
+                <div><b>Blocked Keywords:</b> <span class="keywords">{{ blocked_keywords|join(', ') if blocked_keywords else 'None' }}</span></div>
+                <div><b>Regex Patterns:</b> <span class="patterns">{{ regex_patterns|join(', ') if regex_patterns else 'None' }}</span></div>
+                <div><b>Blocked Messages:</b> <span class="blocked-count">{{ messages|selectattr('event', 'equalto', 'blocked')|list|length }}</span> / <span class="total-count">{{ messages|length }}</span></div>
+            </div>
+        </div>
+        <div class="messages-list">
+            {% for msg in messages %}
+            <div class="message-card {% if msg.event == 'blocked' %}blocked{% endif %}" style="border-left: 5px solid {{ custom_color }};">
+                <div class="msg-header">
+                    <span class="msg-author">{{ msg.author }}</span>
+                    <span class="msg-channel">in {{ msg.channel }}</span>
+                    <span class="msg-event {% if msg.event == 'blocked' %}blocked-label{% endif %}">{% if msg.event == 'blocked' %}🚫 Blocked by Automod{% else %}Message{% endif %}</span>
+                </div>
+                <div class="msg-content">{{ msg.content }}</div>
+                <div class="msg-footer">
+                    <span class="msg-timestamp">{{ msg.timestamp }}</span>
+                </div>
+            </div>
+            {% else %}
+            <div class="no-messages"><em>No messages logged for this guild.</em></div>
+            {% endfor %}
+        </div>
+
+        {% if global_messages and global_messages|length > 0 %}
+        <hr style="margin: 40px 0; border: 0; border-top: 2px dashed #faa61a;">
+        <h2 style="color:#faa61a;text-align:center;margin-bottom:18px;">Global Automod Log Messages</h2>
+        <div class="messages-list">
+            {% for msg in global_messages %}
+            <div class="message-card {% if msg.event == 'blocked' %}blocked{% endif %}" style="border-left: 5px solid #faa61a;">
+                <div class="msg-header">
+                    <span class="msg-guild" style="color:#43b581;font-weight:bold;margin-right:10px;">{{ msg.guild_name or 'Unknown Guild' }}</span>
+                    <span class="msg-author">{{ msg.author or 'Unknown' }}</span>
+                    <span class="msg-channel">in {{ msg.channel or 'N/A' }}</span>
+                    <span class="msg-event {% if msg.event == 'blocked' %}blocked-label{% endif %}">{% if msg.event == 'blocked' %}🚫 Blocked by Automod{% else %}Global Log{% endif %}</span>
+                </div>
+                <div class="msg-content">{{ msg.content }}</div>
+                <div class="msg-footer">
+                    <span class="msg-timestamp">{{ msg.timestamp or '' }}</span>
+                </div>
+            </div>
+            {% else %}
+            <div class="no-messages"><em>No global automod log messages found.</em></div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+    </div>
+</body>
+<style>
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #23272a; color: #fff; margin: 0; }
+.header { background: #202225; padding: 0.7rem 0; box-shadow: 0 2px 8px #0008; }
+.header-content { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.logo { font-size: 1.4rem; color: #faa61a; font-weight: bold; }
+nav a { color: #faa61a; margin-left: 2rem; text-decoration: none; font-weight: 500; }
+nav a:hover { text-decoration: underline; }
+.container { max-width: 900px; margin: 40px auto; background: #2c2f33; padding: 40px 32px 32px 32px; border-radius: 10px; box-shadow: 0 2px 12px #000a; }
+.guild-settings-card { border-radius: 12px; box-shadow: 0 2px 8px #0008; padding: 24px 30px 18px 30px; margin-bottom: 32px; transition: background 0.3s, border-color 0.3s; }
+.guild-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.guild-title { font-size: 1.4rem; color: #faa61a; font-weight: bold; }
+.guild-id { color: #bbb; font-size: 1rem; opacity: 0.8; }
+.guild-settings > div { margin-bottom: 6px; }
+.badge { display: inline-block; padding: 2px 12px; border-radius: 8px; font-weight: 600; font-size: 0.97em; margin-left: 7px; }
+.automod-status.enabled { background: #2ecc40; color: #fff; }
+.timeout-status.enabled { background: #7289da; color: #fff; }
+.timeout-status.disabled { background: #888; color: #fff; }
+.keywords, .patterns { color: #faa61a; }
+.blocked-count { color: #ff5555; font-weight: 600; }
+.total-count { color: #aaa; }
+.messages-list { display: flex; flex-direction: column; gap: 18px; }
+.message-card { background: #202225; border-radius: 8px; box-shadow: 0 1px 6px #0005; padding: 18px 20px 14px 20px; color: #fff; transition: box-shadow 0.15s;  }
+.message-card.blocked { background: #3a2323; color: #ffb3b3; border-left: 5px solid #ff5555; }
+.msg-header { display: flex; align-items: center; gap: 18px; margin-bottom: 6px; }
+.msg-author { font-weight: 600; color: #faa61a; }
+.msg-channel { color: #aaa; font-size: 0.97rem; }
+.msg-event { font-size: 0.98rem; color: #7289da; background: #23272a; padding: 2px 10px; border-radius: 6px; margin-left: auto; }
+.msg-event.blocked-label { color: #fff; background: #ff5555; font-weight: 600; }
+.msg-content { margin-bottom: 7px; font-size: 1.08rem; word-break: break-word; }
+.msg-footer { text-align: right; font-size: 0.96rem; color: #bbb; }
+.no-messages { text-align: center; color: #faa61a; font-size: 1.1rem; margin-top: 30px; }
+</style>
+    </div>
+</body>
+</html>

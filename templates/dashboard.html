@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Guild Dashboard</title>
+    <style>
+        body { background: #23272a; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; }
+        .header { background: #202225; padding: 0.7rem 0; box-shadow: 0 2px 8px #0008; }
+        .header-content { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .logo { font-size: 1.4rem; color: #faa61a; font-weight: bold; }
+        nav a { color: #faa61a; margin-left: 2rem; text-decoration: none; font-weight: 500; }
+        nav a:hover { text-decoration: underline; }
+        .container { max-width: 950px; margin: 40px auto; background: #2c2f33; padding: 40px 32px 32px 32px; border-radius: 10px; box-shadow: 0 2px 12px #000a; }
+        h1 { color: #faa61a; margin-bottom: 32px; }
+        .guild-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 30px; margin-top: 24px; }
+        .guild-card { background: #23272a; border-radius: 8px; box-shadow: 0 1px 6px #0005; padding: 25px 20px 18px 20px; display: flex; flex-direction: column; align-items: start; }
+        .guild-name { font-size: 1.2rem; font-weight: 600; color: #faa61a; margin-bottom: 8px; }
+        .guild-id { color: #fff; font-size: 0.98rem; opacity: 0.7; margin-bottom: 16px; }
+        .dashboard-btns { display: flex; gap: 14px; margin-top: 10px; }
+        .dashboard-btn { background: #faa61a; color: #23272a; border: none; padding: 8px 18px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.15s; text-decoration: none; }
+        .dashboard-btn:hover { background: #ffbb3b; }
+        .no-guilds { color: #faa61a; font-size: 1.1rem; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <span class="logo">Discord Portal</span>
+            <nav>
+                <a href="{{ url_for('portal') }}">Portal Home</a>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <h1>Guild Dashboard</h1>
+        <div id="guilds-list">
+            <em>Loading guilds...</em>
+        </div>
+        <script>
+        function updateGuilds() {
+            fetch('/api/guilds')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('guilds-list');
+                    if (!data.guilds.length) {
+                        container.innerHTML = '<p class="no-guilds">No guilds found.</p>';
+                        return;
+                    }
+                    let html = '<div class="guild-list">';
+                    data.guilds.forEach(guild => {
+                        html += `<div class=\"guild-card\">` +
+                                `<div class=\"guild-name\">${guild.name}</div>` +
+                                `<div class=\"guild-id\">ID: ${guild.id}</div>` +
+                                `<div class=\"dashboard-btns\">` +
+                                `<a href=\"/guild/${guild.id}/messages\" class=\"dashboard-btn\">Messages</a> ` +
+                                `<a href=\"/guild/${guild.id}/templates\" class=\"dashboard-btn\">Templates</a>` +
+                                `</div></div>`;
+                    });
+                    html += '</div>';
+                    container.innerHTML = html;
+                });
+        }
+        updateGuilds();
+        setInterval(updateGuilds, 10000);
+        </script>
+        {% endif %}
+    </div>
+</body>
+</html>

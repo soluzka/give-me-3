@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Your Discord Bot</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to bottom, #1e1e2f, #2c2f33) no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: rgba(35, 39, 42, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+        h1, h2 {
+            color: #7289da;
+            text-align: center;
+        }
+        p {
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        .command {
+            margin: 15px 0;
+            padding: 15px;
+            background: #3b3f45;
+            border-left: 5px solid #7289da;
+            border-radius: 5px;
+        }
+        a, button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #7289da;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        a:hover, button:hover {
+            background-color: #5a6fb2;
+        }
+        input[type="text"] {
+            width: calc(100% - 30px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #7289da;
+            border-radius: 5px;
+            background: #2c2f33;
+            color: #ffffff;
+        }
+        input[type="text"]::placeholder {
+            color: #99aab5;
+        }
+        form {
+            margin-top: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #2c2f33;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        li span {
+            font-weight: bold;
+            color: #7289da;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Discord Bot - In Development</h1>
+        <p>This bot is currently in development. Below are the commands available:</p>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="flash-{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <div style="margin: 24px 0;">
+            <form method="POST" action="/backup_guild" style="margin-bottom:18px;">
+                <label for="backup_guild_id">Guild ID:</label>
+                <input type="text" id="backup_guild_id" name="guild_id" placeholder="Enter Guild ID" required>
+                <button type="submit">Back Up Guild</button>
+            </form>
+            <form method="POST" action="/restore_guild_from_backup" style="margin-bottom:18px;">
+                <label for="restore_guild_id">Guild ID:</label>
+                <input type="text" id="restore_guild_id" name="guild_id" placeholder="Enter Guild ID" required>
+                <button type="submit">Restore Guild from Backup</button>
+            </form>
+            <form method="POST" action="/restore_template">
+                <label for="template_guild_id">Guild ID:</label>
+                <input type="text" id="template_guild_id" name="guild_id" placeholder="Enter Guild ID" required>
+                <label for="template_name">Template Name:</label>
+                <input type="text" id="template_name" name="template_name" placeholder="Enter Template Name" required>
+                <button type="submit">Restore Guild from Template</button>
+            </form>
+        </div>
+        <div class="command">
+            <strong>/backup</strong>: Creates a backup of the server's current settings.
+        </div>
+        <div class="command">
+            <strong>/restore</strong>: Restores server settings from a backup file.
+        </div>
+        <div class="command">
+            <strong>/create_template</strong>: Saves the current server settings as a reusable template.
+        </div>
+        <div class="command">
+            <strong>/use_template</strong>: Applies a saved template to restore server settings.
+        </div>
+        <h1>Invite My Discord Bot</h1>
+        <p>Click the button below to invite the bot to your server!</p>
+        <a href="https://discord.com/api/oauth2/authorize?client_id=1285549408087310408&permissions=8&scope=bot" target="_blank">
+            <button>Invite Bot</button>
+        </a>
+    </div>
+    <div class="container">
+        <h2>Apply a Template</h2>
+        <form action="/apply_template" method="get">
+            <label for="template_name">Template Name (Local):</label>
+            <input type="text" id="template_name" name="template_name" placeholder="Enter local template name" required>
+            <button type="submit">Apply Local Template</button>
+        </form>
+        <form action="/fetch_template" method="get">
+            <label for="remote_template_name">Template Name (Remote):</label>
+            <input type="text" id="remote_template_name" name="template_name" placeholder="Enter remote template name" required>
+            <button type="submit">Fetch and Apply Remote Template</button>
+        </form>
+    </div>
+    <div class="container">
+        <h2>Save a New Template</h2>
+        <!-- TODO: Replace 123456789012345678 with the actual guild_id dynamically -->
+        <form action="/save_template/{{ guild_id }}" method="post">
+            <label for="save_template_name">Template Name:</label>
+            <input type="text" id="save_template_name" name="template_name" placeholder="Enter template name (e.g., backup1)" required>
+            <button type="submit">Save Template</button>
+        </form>
+    </div>
+    <div class="container">
+        {% if discord_user %}
+            <h2>Welcome, {{ discord_user.username }}</h2>
+            <form action="/apply_template_web" method="post">
+                <label for="template_name">Template Name:</label>
+                <input type="text" id="template_name" name="template_name" placeholder="Enter template name" required>
+                <button type="submit">Apply Template</button>
+            </form>
+            <a href="/logout"><button>Logout</button></a>
+        {% else %}
+            <h2>Sign in to Apply Templates</h2>
+            <a href="/login"><button>Sign in with Discord</button></a>
+        {% endif %}
+    </div>
+    <div class="container">
+        <h1>Important Commands</h1>
+        <ul>
+            <li><span>/ping:</span> Check if the bot is online.</li>
+            <li><span>/botinfo:</span> Get detailed information about the bot.</li>
+            <li><span>/serversettings:</span> View the current server settings.</li>
+            <li><span>/backup:</span> Backup the server settings (Admin only).</li>
+            <li><span>/restore:</span> Restore server settings from a backup (Admin only).</li>
+            <li><span>/create_template:</span> Create a server template (Admin only).</li>
+            <li><span>/use_template:</span> Restore server settings from a template (Admin only).</li>
+            <li><span>/hide_owner_id:</span> Toggle hiding the owner's ID in the portal (Admin only).</li>
+            <li><span>/set_portal_settings:</span> Update portal settings like automod or spam detection (Admin only).</li>
+            <li><span>/set_owner_role:</span> Assign an owner role to the server or individual members (Admin only).</li>
+            <li><span>/global_announcement:</span> Send a global announcement to all servers (Admin only).</li>
+        </ul>
+    </div>
+</body>
+</html>

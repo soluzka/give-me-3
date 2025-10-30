@@ -1,0 +1,944 @@
+{
+  "id": 1277588403852152832,
+  "name": "𝖆𝖊𝖘 𝖈𝖎𝖕𝖍𝖊𝖗",
+  "owner_id": 497896290395488266,
+  "owner": "your_image_here",
+  "icon_url": "https://cdn.discordapp.com/icons/1277588403852152832/da43934d1e308a0d2c3fd18e6865eeba.png?size=1024",
+  "features": [
+    "GUILD_ONBOARDING_EVER_ENABLED",
+    "COMMUNITY",
+    "CREATOR_ACCEPTED_NEW_TERMS",
+    "ENABLED_MODERATION_EXPERIENCE_FOR_NON_COMMUNITY",
+    "GUILD_ONBOARDING_HAS_PROMPTS",
+    "MEMBER_VERIFICATION_GATE_ENABLED",
+    "SOUNDBOARD",
+    "CREATOR_MONETIZABLE_PROVISIONAL",
+    "PREVIEW_ENABLED",
+    "NEWS",
+    "AUTO_MODERATION",
+    "GUILD_ONBOARDING",
+    "GUILD_SERVER_GUIDE",
+    "MEMBER_VERIFICATION_MANUAL_APPROVAL"
+  ],
+  "member_count": 68,
+  "created_at": "2024-08-26 11:20:11.923000+00:00",
+  "roles": [
+    {
+      "id": 1277588403852152832,
+      "name": "@everyone",
+      "permissions": 1940369624883136,
+      "color": 0,
+      "position": 0,
+      "mentionable": false,
+      "hoist": false,
+      "managed": false
+    },
+    {
+      "id": 1358272103794868347,
+      "name": "Emoji.gg Bot",
+      "permissions": 8936753581056,
+      "color": 0,
+      "position": 1,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1358260818051076269,
+      "name": "Automator",
+      "permissions": 25601,
+      "color": 0,
+      "position": 2,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1328540240012644447,
+      "name": "Guilds.me",
+      "permissions": 805306497,
+      "color": 0,
+      "position": 3,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1304645564012560445,
+      "name": "Orator",
+      "permissions": 3145760,
+      "color": 0,
+      "position": 4,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1283795719693664320,
+      "name": "Lofi Radio",
+      "permissions": 66407488,
+      "color": 0,
+      "position": 5,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1283715686283214872,
+      "name": "BetterNotes",
+      "permissions": 519232,
+      "color": 0,
+      "position": 6,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1283715643945914392,
+      "name": "BetterInvites",
+      "permissions": 1101927548960,
+      "color": 0,
+      "position": 7,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1283715010824114267,
+      "name": "BetterCensor",
+      "permissions": 537259120,
+      "color": 0,
+      "position": 8,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1283654606727024694,
+      "name": "DisListing",
+      "permissions": 8858454144,
+      "color": 0,
+      "position": 9,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1283654039648731218,
+      "name": "Dyno",
+      "permissions": 1513962695871,
+      "color": 0,
+      "position": 10,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1283652591359623212,
+      "name": "DISBOARD.org",
+      "permissions": 19473,
+      "color": 0,
+      "position": 11,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1283645295128870966,
+      "name": "Pilot",
+      "permissions": 805817525,
+      "color": 0,
+      "position": 12,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1277983446509293568,
+      "name": "Chatting",
+      "permissions": 1799632136527808,
+      "color": 9072896,
+      "position": 13,
+      "mentionable": false,
+      "hoist": true,
+      "managed": false
+    },
+    {
+      "id": 1278129190163447902,
+      "name": "Nice Person",
+      "permissions": 1799632136527808,
+      "color": 10236980,
+      "position": 14,
+      "mentionable": false,
+      "hoist": true,
+      "managed": false
+    },
+    {
+      "id": 1277594497810956288,
+      "name": "A User Ready",
+      "permissions": 1799632136527808,
+      "color": 5021813,
+      "position": 15,
+      "mentionable": false,
+      "hoist": true,
+      "managed": false
+    },
+    {
+      "id": 1277594143392010342,
+      "name": "Creator Role",
+      "permissions": 1799632136527808,
+      "color": 1015936,
+      "position": 16,
+      "mentionable": false,
+      "hoist": true,
+      "managed": false
+    },
+    {
+      "id": 1280610030860767233,
+      "name": "Soldier",
+      "permissions": 1799632136527808,
+      "color": 16753759,
+      "position": 17,
+      "mentionable": false,
+      "hoist": true,
+      "managed": false
+    },
+    {
+      "id": 1280610923995861102,
+      "name": "General",
+      "permissions": 1799632136527808,
+      "color": 16762240,
+      "position": 18,
+      "mentionable": false,
+      "hoist": true,
+      "managed": false
+    },
+    {
+      "id": 1280612252986118296,
+      "name": "Sargeant",
+      "permissions": 1799632136527808,
+      "color": 16762977,
+      "position": 19,
+      "mentionable": false,
+      "hoist": true,
+      "managed": false
+    },
+    {
+      "id": 1283273736316911680,
+      "name": "RoomCreator",
+      "permissions": 8,
+      "color": 0,
+      "position": 20,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1283232612361703500,
+      "name": "Floyd",
+      "permissions": 67648,
+      "color": 0,
+      "position": 21,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1283232058562580484,
+      "name": "Catch Me Up",
+      "permissions": 309237992448,
+      "color": 0,
+      "position": 22,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1283094799439761448,
+      "name": "Friend Time",
+      "permissions": 85056,
+      "color": 0,
+      "position": 23,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1283079078869471357,
+      "name": "marCloudBackup_rel46",
+      "permissions": 8,
+      "color": 0,
+      "position": 24,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1283024348805861389,
+      "name": "AutoMod",
+      "permissions": 1374620609647,
+      "color": 0,
+      "position": 25,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1283023478160883777,
+      "name": "AutoModerator",
+      "permissions": 1100451531910,
+      "color": 0,
+      "position": 26,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1281874908179337249,
+      "name": "Pulse",
+      "permissions": 274914887936,
+      "color": 0,
+      "position": 27,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1281491749814009931,
+      "name": "Maki.gg",
+      "permissions": 8,
+      "color": 0,
+      "position": 28,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1281491117610631233,
+      "name": "Rythm",
+      "permissions": 2048,
+      "color": 0,
+      "position": 29,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1281370187051831421,
+      "name": "DTools",
+      "permissions": 8,
+      "color": 0,
+      "position": 30,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1281367304684306496,
+      "name": "Chat Checker",
+      "permissions": 1538068573234,
+      "color": 0,
+      "position": 31,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1281362011992887381,
+      "name": "ProfanityBlocker",
+      "permissions": 1402202041398,
+      "color": 0,
+      "position": 32,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1281360268278104150,
+      "name": "BetterCensoring",
+      "permissions": 738585616,
+      "color": 0,
+      "position": 33,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1280967054165282932,
+      "name": "Everyone Votes",
+      "permissions": 379968,
+      "color": 0,
+      "position": 34,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1280962763614720094,
+      "name": "Censor Bot",
+      "permissions": 18119419910,
+      "color": 0,
+      "position": 35,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1280908163238854806,
+      "name": "BibleBot",
+      "permissions": 277562616896,
+      "color": 0,
+      "position": 36,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1280618666727182339,
+      "name": "Midjourney Bot",
+      "permissions": 2147601472,
+      "color": 0,
+      "position": 37,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1280186542265991230,
+      "name": "SIMKL",
+      "permissions": 2147486720,
+      "color": 0,
+      "position": 38,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1279753377793970200,
+      "name": "Wick",
+      "permissions": 8,
+      "color": 0,
+      "position": 39,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1278690056634241107,
+      "name": "Koko",
+      "permissions": 326686042128,
+      "color": 0,
+      "position": 40,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1278393601084227650,
+      "name": "Bumpy.gg",
+      "permissions": 1342195761,
+      "color": 0,
+      "position": 41,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1278221108356841545,
+      "name": "Double Counter",
+      "permissions": 8,
+      "color": 0,
+      "position": 42,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1278215137378963510,
+      "name": "Sx4 Canary",
+      "permissions": 8,
+      "color": 0,
+      "position": 43,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1278207814472437806,
+      "name": "Invite Tracker",
+      "permissions": 268822624,
+      "color": 0,
+      "position": 44,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1278207534968078426,
+      "name": "Sapphire",
+      "permissions": 1101596716286,
+      "color": 0,
+      "position": 45,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1278192990187163723,
+      "name": "DiscordServers.com",
+      "permissions": 1,
+      "color": 0,
+      "position": 46,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1278169575703187460,
+      "name": "24/7 🔊",
+      "permissions": 3460160,
+      "color": 0,
+      "position": 47,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1278074482246025321,
+      "name": "Hydro",
+      "permissions": 268553280,
+      "color": 0,
+      "position": 48,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1278013207604236341,
+      "name": "Asagi",
+      "permissions": 8,
+      "color": 0,
+      "position": 49,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1278010831467970593,
+      "name": "DS.ME",
+      "permissions": 268435457,
+      "color": 0,
+      "position": 50,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1277591361469550689,
+      "name": "Who's There?",
+      "permissions": 19922944,
+      "color": 0,
+      "position": 51,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    },
+    {
+      "id": 1283024918535077932,
+      "name": "Moderator",
+      "permissions": 1800731811216194,
+      "color": 15158332,
+      "position": 52,
+      "mentionable": false,
+      "hoist": false,
+      "managed": false
+    },
+    {
+      "id": 1280783987115032606,
+      "name": "Admin",
+      "permissions": 8,
+      "color": 1979166,
+      "position": 53,
+      "mentionable": false,
+      "hoist": true,
+      "managed": false
+    },
+    {
+      "id": 1333850494581604460,
+      "name": "SAVE MY SERVER BOT restorecord",
+      "permissions": 76808,
+      "color": 0,
+      "position": 54,
+      "mentionable": false,
+      "hoist": false,
+      "managed": true
+    }
+  ],
+  "channels": [
+    {
+      "id": 1283267386090192967,
+      "name": "SERVICES LOGGING",
+      "type": "category",
+      "category": null,
+      "position": 1
+    },
+    {
+      "id": 1283267392998346866,
+      "name": "🔊・logs-vocaux",
+      "type": "text",
+      "category": "SERVICES LOGGING",
+      "position": 6
+    },
+    {
+      "id": 1283267389949218876,
+      "name": "📁・logs-serveur",
+      "type": "text",
+      "category": "SERVICES LOGGING",
+      "position": 4
+    },
+    {
+      "id": 1283267410522275885,
+      "name": "🌟promo",
+      "type": "text",
+      "category": "Special Advance",
+      "position": 12
+    },
+    {
+      "id": 1360819284036550666,
+      "name": "open-chat",
+      "type": "text",
+      "category": null,
+      "position": 32
+    },
+    {
+      "id": 1360819286829957212,
+      "name": "chat-everyone",
+      "type": "text",
+      "category": null,
+      "position": 34
+    },
+    {
+      "id": 1283267429073424436,
+      "name": "🔱show-off",
+      "type": "text",
+      "category": "Open chat",
+      "position": 19
+    },
+    {
+      "id": 1360819282748903595,
+      "name": "tempvoice-category",
+      "type": "text",
+      "category": null,
+      "position": 31
+    },
+    {
+      "id": 1278224395575234633,
+      "name": "⛔rules",
+      "type": "text",
+      "category": "Private Rooms",
+      "position": 24
+    },
+    {
+      "id": 1283825944368381997,
+      "name": "Private Rooms",
+      "type": "category",
+      "category": null,
+      "position": 7
+    },
+    {
+      "id": 1283267414712254586,
+      "name": "TEMPVOICE CATEGORY",
+      "type": "category",
+      "category": null,
+      "position": 4
+    },
+    {
+      "id": 1283648540131725312,
+      "name": "🎊lets-chat-ping",
+      "type": "text",
+      "category": "Chat For Hanging Out",
+      "position": 7
+    },
+    {
+      "id": 1360819282132340807,
+      "name": "private-rooms",
+      "type": "text",
+      "category": null,
+      "position": 30
+    },
+    {
+      "id": 1283648306395742362,
+      "name": "⌛announce-posts",
+      "type": "text",
+      "category": "CHAT EVERYONE",
+      "position": 21
+    },
+    {
+      "id": 1283267421242789939,
+      "name": "✨・interface",
+      "type": "text",
+      "category": "TEMPVOICE CATEGORY",
+      "position": 17
+    },
+    {
+      "id": 1283648994039435295,
+      "name": "📀free-clips-server",
+      "type": "text",
+      "category": "TEMPVOICE CATEGORY",
+      "position": 14
+    },
+    {
+      "id": 1278224395575234636,
+      "name": "🚫moderator-only",
+      "type": "text",
+      "category": null,
+      "position": 0
+    },
+    {
+      "id": 1283267403144364032,
+      "name": "🔎voip 2",
+      "type": "voice",
+      "category": "Chat For Hanging Out",
+      "position": 2
+    },
+    {
+      "id": 1283825945311973376,
+      "name": "🚀Create Room",
+      "type": "voice",
+      "category": "Private Rooms",
+      "position": 9
+    },
+    {
+      "id": 1283267433515319397,
+      "name": "💯Stream",
+      "type": "voice",
+      "category": "Open chat",
+      "position": 6
+    },
+    {
+      "id": 1283267424862601218,
+      "name": "Open chat",
+      "type": "category",
+      "category": null,
+      "position": 5
+    },
+    {
+      "id": 1283267445099991132,
+      "name": "💩admin-news",
+      "type": "text",
+      "category": "Private Rooms",
+      "position": 26
+    },
+    {
+      "id": 1283267391534534707,
+      "name": "📜・logs-sanctions",
+      "type": "text",
+      "category": "SERVICES LOGGING",
+      "position": 5
+    },
+    {
+      "id": 1283267419896549416,
+      "name": "✌only-safe-stuff",
+      "type": "text",
+      "category": "TEMPVOICE CATEGORY",
+      "position": 16
+    },
+    {
+      "id": 1283267401898655795,
+      "name": "🔍voip 1",
+      "type": "voice",
+      "category": "Chat For Hanging Out",
+      "position": 1
+    },
+    {
+      "id": 1283267397918396469,
+      "name": "💥bot-room",
+      "type": "text",
+      "category": "Chat For Hanging Out",
+      "position": 8
+    },
+    {
+      "id": 1283636157623697522,
+      "name": "👑groups",
+      "type": "text",
+      "category": "Private Rooms",
+      "position": 25
+    },
+    {
+      "id": 1283267411809669121,
+      "name": "📌buy-roles",
+      "type": "text",
+      "category": "Special Advance",
+      "position": 13
+    },
+    {
+      "id": 1283648713625042944,
+      "name": "⭕open chat",
+      "type": "voice",
+      "category": "CHAT EVERYONE",
+      "position": 8
+    },
+    {
+      "id": 1283267423734075496,
+      "name": "➕Creator Channel",
+      "type": "voice",
+      "category": "TEMPVOICE CATEGORY",
+      "position": 4
+    },
+    {
+      "id": 1360819287673016492,
+      "name": "special-advance",
+      "type": "text",
+      "category": null,
+      "position": 35
+    },
+    {
+      "id": 1283267439748055060,
+      "name": "⏰AFK",
+      "type": "voice",
+      "category": "CHAT EVERYONE",
+      "position": 7
+    },
+    {
+      "id": 1360819281151135795,
+      "name": "services-logging",
+      "type": "text",
+      "category": null,
+      "position": 29
+    },
+    {
+      "id": 1283267413466681374,
+      "name": "📺Gaming",
+      "type": "voice",
+      "category": "Special Advance",
+      "position": 3
+    },
+    {
+      "id": 1283648467918393344,
+      "name": "📬free-stuff-admins",
+      "type": "text",
+      "category": "Private Rooms",
+      "position": 27
+    },
+    {
+      "id": 1283267395548479489,
+      "name": "Chat For Hanging Out",
+      "type": "category",
+      "category": null,
+      "position": 2
+    },
+    {
+      "id": 1283267434421161985,
+      "name": "CHAT EVERYONE",
+      "type": "category",
+      "category": null,
+      "position": 6
+    },
+    {
+      "id": 1360819285219475559,
+      "name": "chat-for-hanging-out",
+      "type": "text",
+      "category": null,
+      "position": 33
+    },
+    {
+      "id": 1283267403890950195,
+      "name": "Special Advance",
+      "type": "category",
+      "category": null,
+      "position": 3
+    },
+    {
+      "id": 1283267432152301578,
+      "name": "😎Activities",
+      "type": "voice",
+      "category": "Open chat",
+      "position": 5
+    },
+    {
+      "id": 1283267400653078539,
+      "name": "🔔questions",
+      "type": "text",
+      "category": "Chat For Hanging Out",
+      "position": 9
+    },
+    {
+      "id": 1283267408131391603,
+      "name": "✅rules",
+      "type": "text",
+      "category": "Special Advance",
+      "position": 10
+    },
+    {
+      "id": 1283267436858048513,
+      "name": "💫reviews",
+      "type": "text",
+      "category": "CHAT EVERYONE",
+      "position": 22
+    },
+    {
+      "id": 1283267388472561726,
+      "name": "🌐・logs-behaviors",
+      "type": "text",
+      "category": "SERVICES LOGGING",
+      "position": 3
+    },
+    {
+      "id": 1283267430302355507,
+      "name": "🌞chat",
+      "type": "text",
+      "category": "Open chat",
+      "position": 20
+    },
+    {
+      "id": 1283267409637146717,
+      "name": "🔕posts",
+      "type": "text",
+      "category": "Special Advance",
+      "position": 11
+    },
+    {
+      "id": 1283267417564254271,
+      "name": "⚡general",
+      "type": "text",
+      "category": "TEMPVOICE CATEGORY",
+      "position": 15
+    },
+    {
+      "id": 1359325606361169990,
+      "name": "notifications",
+      "type": "text",
+      "category": null,
+      "position": 28
+    },
+    {
+      "id": 1283267394462285899,
+      "name": "🚩Room Maker",
+      "type": "voice",
+      "category": "SERVICES LOGGING",
+      "position": 0
+    },
+    {
+      "id": 1283645549983174677,
+      "name": "pilot-link",
+      "type": "text",
+      "category": null,
+      "position": 1
+    },
+    {
+      "id": 1283267427270135810,
+      "name": "👌make-friends",
+      "type": "text",
+      "category": "Open chat",
+      "position": 18
+    },
+    {
+      "id": 1283267438166937682,
+      "name": "🌠text-here",
+      "type": "text",
+      "category": "CHAT EVERYONE",
+      "position": 23
+    }
+  ],
+  "emojis": []
+}
