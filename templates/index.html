@@ -133,9 +133,29 @@
         </div>
         <h1>Invite My Discord Bot</h1>
         <p>Click the button below to invite the bot to your server!</p>
-        <a href="https://discord.com/oauth2/authorize?client_id=1285549408087310408&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Fapi&integration_type=0&scope=bot+applications.commands" target="_blank">
-            <button>Invite Bot</button>
-        </a>
+        <div class="invite-container">
+            <a href="https://discord.com/oauth2/authorize
+                ?client_id=1285549408087310408
+                &permissions=268443728
+                &scope=bot%20applications.commands
+                &response_type=code
+                &redirect_uri={{ url_for('discord_callback', _external=True) | urlencode }}"
+               class="btn btn-primary" 
+               target="_blank"
+               rel="noopener noreferrer">
+                <button>Invite Bot</button>
+            </a>
+            <div class="permissions-info">
+                <p>Required permissions:</p>
+                <ul>
+                    <li>Send Messages</li>
+                    <li>Manage Messages</li>
+                    <li>View Channels</li>
+                    <li>Read Message History</li>
+                    <li>Embed Links</li>
+                </ul>
+            </div>
+        </div>
     </div>
     <div class="container">
         <h2>Apply a Template</h2>
