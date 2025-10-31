@@ -1,7 +1,6 @@
 # give-me-3-discord
 discord bot
-automod details are https://github.com/bob21savage/give-me-3-discord
-https://give-me-3-discord.onrender.com add discord automod
+automod details are https://give-me-3.onrender.com/ add discord automod
 (?<url>^https:\/\/(?:(?:canary|ptb).)?discord(?:app)?.com\/api(?:\/v\d+)?\/webhooks\/(?<id>\d+)\/(?<token>[\w-]+)\/?$)
 [^\f\n\r\t\v\u0020\u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]
 ^.*([A-Za-z0-9]+( [A-Za-z0-9]+)+).*[A-Za-z]+.*$
