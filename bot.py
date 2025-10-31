@@ -1113,7 +1113,7 @@ def set_timeout(guild_id):
     return redirect(url_for('portal'))
 
 DISCORD_CLIENT_SECRET = os.getenv('ClientSecret')  # Load ClientSecret from .env
-DISCORD_REDIRECT_URI = os.getenv('DISCORD_REDIRECT_URI', 'https://give-me-3-discord.onrender.com/api/auth/discord/redirect')
+DISCORD_REDIRECT_URI = os.getenv('DISCORD_REDIRECT_URI', 'https://give-me-3.onrender.com/api/auth/discord/redirect')
 DISCORD_API_BASE_URL = os.getenv('DISCORD_API_BASE_URL', 'https://discord.com/api')
 
 # Secret key for Flask session
@@ -3048,7 +3048,7 @@ async def create_template(interaction: nextcord.Interaction, template_name: str)
         safe_json_dump(server_settings, template_file, indent=2)
 
     # Use the fixed base URL for the template link
-    base_url = "https://give-me-3-discord.onrender.com"
+    base_url = "https://give-me-3.onrender.com"
     template_url = f"{base_url}/templates/{template_filename}"
 
     try:
@@ -3788,7 +3788,7 @@ def get_server_settings(guild_id):
         logging.error(f"Error retrieving settings for guild {guild_id}: {e}")
         return {"error": f"An error occurred: {e}"}, 500
 
-BASE_URL = "https://give-me-3-discord.onrender.com/templates"
+BASE_URL = "https://give-me-3.onrender.com/templates"
 
 @app.route('/fetch_template/<template_name>', methods=['GET'])
 def fetch_template(template_name):
